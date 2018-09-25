@@ -20,7 +20,7 @@ var ErrPathNotSet = errors.New("gopath not set")
 
 var watchedFileExt = []string{".go", ".tmpl", ".tpl", ".html"}
 
-var buildDelay = 7 * time.Secon
+var buildDelay = 5 * time.Second
 var watchDelta = 1000 * time.Millisecond
 
 // Watcher watches the file change events from fsnotify and
@@ -87,6 +87,7 @@ func (w *Watcher) Watch() {
 				// prevent consequent builds
 				go func() {
 					// delay is needed when uploading over WinSCP
+					fmt.Printf("Delaying build for %s\n", buildDelay)
 					time.Sleep(buildDelay)
 					w.update <- struct{}{}
 					time.Sleep(watchDelta)
