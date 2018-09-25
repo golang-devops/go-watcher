@@ -20,6 +20,7 @@ var ErrPathNotSet = errors.New("gopath not set")
 
 var watchedFileExt = []string{".go", ".tmpl", ".tpl", ".html"}
 
+var buildDelay = 2 * time.Secon
 var watchDelta = 1000 * time.Millisecond
 
 // Watcher watches the file change events from fsnotify and
@@ -85,6 +86,7 @@ func (w *Watcher) Watch() {
 				eventSent = true
 				// prevent consequent builds
 				go func() {
+					time.Sleep(buildDelay)
 					w.update <- struct{}{}
 					time.Sleep(watchDelta)
 					eventSent = false
